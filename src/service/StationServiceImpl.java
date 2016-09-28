@@ -13,16 +13,23 @@ import domain.Station;
 @Service
 public class StationServiceImpl implements StationService {
 	Session session = HibernateUtil.getStationSessionFactory().openSession();
+
 	@Override
 	public void add(String name) {
-		session.beginTransaction();
-		Station station = new Station();
-		station.setName(name);
-		station.setUpdateTime(new Date());
-		session.save(station);
-		session.flush();
-		session.clear();
-		session.getTransaction().commit();
+		try {
+			session.beginTransaction();
+			Station station = new Station();
+			station.setName(name);
+			station.setUpdateTime(new Date());
+			session.save(station);
+			session.flush();
+			session.clear();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			session.clear();
+			session.getTransaction().commit();
+			e.printStackTrace();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -48,18 +55,26 @@ public class StationServiceImpl implements StationService {
 		session.clear();
 		session.getTransaction().commit();
 	}
+
 	@Override
 	public void update(int id, String name) {
-		System.out.println("session:"+session);
-		session.beginTransaction();
-		Query query = session.createQuery("update Station set name = :name where id = :id");
-		query.setParameter("name", name);
-		query.setParameter("id", id);
-		query.executeUpdate();
-		session.flush();
-		session.clear();
-		session.getTransaction().commit();
+		try {
+			System.out.println("session:" + session);
+			session.beginTransaction();
+			Query query = session.createQuery("update Station set name = :name where id = :id");
+			query.setParameter("name", name);
+			query.setParameter("id", id);
+			query.executeUpdate();
+			session.flush();
+			session.clear();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			session.clear();
+			session.getTransaction().commit();
+			e.printStackTrace();
+		}
 	}
+
 	@Override
 	public Station get(int id) {
 		Query query = session.createQuery("from Station where id = :id");
@@ -68,7 +83,5 @@ public class StationServiceImpl implements StationService {
 		System.out.println("size:" + list().size());
 		return station;
 	}
-
-
 
 }

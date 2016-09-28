@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +22,6 @@ public class StationController {
 	private static final String ADD_PAGE = "station_add_page";
 	private static final String LIST_PAGE = "station_list_page";
 	private static final String VIEW_PAGE = "station_view_page";
-	private final Logger L = LoggerFactory.getLogger(StationController.class);
 	@Resource
 	StationService stationService;
 	@Resource
@@ -45,7 +42,6 @@ public class StationController {
 	@RequestMapping(value = "add", method = { RequestMethod.POST })
 	public @ResponseBody
 	String add(@RequestParam("name") String name) {
-		L.info("name:" + name);
 		System.out.println("name:" + name);
 		stationService.add(name);
 		return name;
@@ -53,7 +49,6 @@ public class StationController {
 
 	@RequestMapping(value = "delete", method = { RequestMethod.GET })
 	public String delete(Model model, @RequestParam("id") int id) {
-		L.info("id:" + id);
 		System.out.println("id:" + id);
 		stationService.delete(id);
 		List<Station> list = stationService.list();
@@ -63,7 +58,6 @@ public class StationController {
 
 	@RequestMapping(value = "view", method = { RequestMethod.GET })
 	public String view(Model model, @RequestParam("id") int id) {
-		L.info("id:" + id);
 		System.out.println("id:" + id);
 		Station station = stationService.get(id);
 		List<Nurse> list = mapperService.listMappedNurse(id);
@@ -75,7 +69,6 @@ public class StationController {
 	@RequestMapping(value = "update", method = { RequestMethod.POST })
 	public @ResponseBody
 	String update(@RequestParam("id") int id, @RequestParam("name") String name) {
-		L.info("name:" + name);
 		System.out.println("id:" + id + " name:" + name);
 		stationService.update(id, name);
 		return name;

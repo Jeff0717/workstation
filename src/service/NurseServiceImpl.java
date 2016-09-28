@@ -13,6 +13,7 @@ public class NurseServiceImpl implements NurseService {
 	Session session = HibernateUtil.getNurseSessionFactory().openSession();
 	@Override
 	public void add(int id,String name) {
+		try{
 		session.beginTransaction();
 		Nurse nurse = new Nurse();
 		nurse.setId(id);
@@ -22,6 +23,11 @@ public class NurseServiceImpl implements NurseService {
 		session.flush();
 		session.clear();
 		session.getTransaction().commit();
+	} catch (Exception e) {
+		session.clear();
+		session.getTransaction().commit();
+		e.printStackTrace();
+	}
 	}
 
 	@SuppressWarnings("unchecked")
